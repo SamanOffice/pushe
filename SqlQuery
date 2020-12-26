@@ -1,0 +1,56 @@
+--Variable
+
+declare @GroupId int =3;
+declare @SenderUserId int =22;
+declare @ReceiverUserId INT=null
+declare @MessageType INT=1
+declare @Message NVARCHAR(MAX)='ertetert boys'
+declare @Data NVARCHAR(MAX)='data rtertert boys'
+declare @FileName NVARCHAR(MAX)='rtertert'
+
+
+
+declare @IsGroupExist  int =(select  top 1(Id) from chat.Groups where Id=@GroupId);
+declare @isAdmin  int=(select top 1(UserId) from chat.Participants where UserId=@SenderUserId and admin=1 and GroupId=@GroupId);
+
+
+---Intrduction 
+if(@IsGroupExist is not  null)
+	if(@isAdmin is not null)
+		begin
+	      select DISTINCT p.GroupId, t.UserId, t.token 
+				from chat.Participants p 
+					left join UserRoles r
+						on r.RoleId=p.RoleId 
+					left  join Tablet.TabletUsers t
+						on t.UserId=r.UserId
+						or t.UserId=p.UserId 
+						or t.WareHouseId = p.WareHouseId
+			where p.GroupId=@GroupId and  t.Token is  not null
+			GOTO  InsertMessage
+		end
+			
+	else
+	begin
+      
+		RAISERROR('user  cant send message in group',16,1);
+		return
+	end
+else
+	begin
+		RAISERROR('group doese not exist',16,1);
+	    goto InsertGroup
+		return
+	end
+
+InsertMessage:
+	begin
+	INSERT INTO chat.Messages  values (@GroupId,@SenderUserId,@MessageType,0,@Message,@Data,GETDATE(),@FileName)
+	END
+	
+InsertGroup:
+	begin
+	INSERT INTO chat.Groups  values (null,@MessageType,null)
+	END
+
+
