@@ -16,6 +16,7 @@ DECLARE  @isAdmin  int=(select top 1(UserId) from chat.Participants where UserId
 
 
 
+
 ---Intrduction 
  if(@ReceiverUserId =0)
 			if(@IsGroupExist is not  null)
