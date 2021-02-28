@@ -1,0 +1,30 @@
+ public class SendNotificationBaseModel
+    {
+        public string to { get; set; }
+        public SendNotificationObjectModel notification { get; set; }
+        public SendNotificationDataModel data { get; set; }
+    }
+    public class SendNotificationObjectModel
+    {
+        public string body { get; set; }
+        public string title { get; set; }
+        public string click_action { get; set; }
+    }
+    public class SendNotificationDataModel
+    {
+        public string image_url { get; set; }
+        public int chat_type { get; set; }
+        public string sender { get; set; }
+        public int group_type { get; set; }
+        public int group_id { get; set; }
+        public int receiver_user_id { get; set; }
+        public int sender_user_id { get; set; }
+        public string sender_user_name { get; set; }
+        public int notifid { get; set; }
+        public string notifdate { get; set; }
+        public int invoice_id { get; set; }
+        public int status { get; set; }
+
+
+
+    }
