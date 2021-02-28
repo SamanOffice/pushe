@@ -1,0 +1,35 @@
+  private  string TypeNotification(ResultSpSendMessage resultSpSend, NewMessage model, ResultDataChat SpResultMessage, string tempFamily, string tempName)
+        {
+            var objNotification = new SendNotificationBaseModel()
+            {
+
+                to = resultSpSend.Token,
+                notification = new SendNotificationObjectModel()
+                {
+                    body = !string.IsNullOrEmpty(model.Title) ? model.Title: model.Message,
+                    title = !string.IsNullOrEmpty(model.Title) ? model.Title :  model.ReceiverUserId == 0
+                            ? Constants.MessageGroup + resultSpSend.GroupName
+                            : Constants.MessageChat + tempName + " " + tempFamily,
+                    click_action = model.click_action == null ? "None" : model.click_action,
+                },
+
+                data = new SendNotificationDataModel()
+                {
+
+                    image_url = model.ImageUrl,
+                    chat_type = 1,
+                    sender = model.ReceiverUserId == 0 ? resultSpSend.GroupName : tempName + " " + tempFamily + "",
+
+                    group_type = resultSpSend.GroupType,
+                    group_id = resultSpSend.GroupId,
+                    receiver_user_id = model.ReceiverUserId == 0 ? 0 : model.ReceiverUserId,
+                    sender_user_id = model.SenderUserId,
+                    sender_user_name = model.ReceiverUserId == 0 ? resultSpSend.SenderName : "",
+
+                    notifid = SpResultMessage.Id,
+                    notifdate = SpResultMessage.CreationDate,
+                    invoice_id = model.InvoiceId == 0 ? 0 : model.InvoiceId,
+                    status=SpResultMessage.Status
+
+                }
+            };
